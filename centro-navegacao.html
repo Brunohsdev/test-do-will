@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Centro de Navegação e Ajuda</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --brown-light: #A0522D;
+      --brown-dark: #5C3317;
+      --brown-deep: #3B1F0E;
+      --brown-muted: #C8845A;
+      --cream: #F5EDE0;
+      --cream-dark: #EEE0CC;
+      --sand: #D4B896;
+      --text-dark: #2A1508;
+      --text-mid: #5A3520;
+      --white: #FDFAF7;
+      --title-bg: #EEE8AA;
+      --title-color: #8a5a2d;
+      --shadow: 0 4px 24px rgba(59,31,14,0.13);
+      --radius: 10px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--text-dark);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 40px 16px 60px;
+      background-image:
+        radial-gradient(ellipse at 80% 10%, rgba(160,82,45,0.08) 0%, transparent 60%),
+        radial-gradient(ellipse at 10% 90%, rgba(92,51,23,0.07) 0%, transparent 60%);
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    header .label {
+      font-size: 11px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--brown-muted);
+      font-weight: 500;
+      margin-bottom: 6px;
+    }
+
+    header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 900;
+      color: var(--brown-deep);
+      line-height: 1.1;
+    }
+
+    header h1 span {
+      color: var(--brown-light);
+    }
+
+    .panel {
+      width: 100%;
+      max-width: 880px;
+      background: var(--white);
+      border-radius: 18px;
+      box-shadow: var(--shadow), 0 1px 0 rgba(160,82,45,0.15);
+      overflow: hidden;
+      border: 1px solid rgba(160,82,45,0.12);
+    }
+
+    /* ── SIDEBAR ── */
+    .layout {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      min-height: 460px;
+    }
+
+    .sidebar {
+      background: linear-gradient(160deg, var(--brown-deep) 0%, var(--brown-dark) 100%);
+      padding: 28px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      border-right: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .sidebar-title {
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.38);
+      font-weight: 500;
+      padding: 0 6px 10px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      margin-bottom: 4px;
+    }
+
+    .nav-btn {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid transparent;
+      color: rgba(255,255,255,0.65);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13.5px;
+      font-weight: 500;
+      padding: 11px 14px;
+      border-radius: var(--radius);
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.22s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .nav-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(255,255,255,0);
+      transition: background 0.2s;
+    }
+
+    .nav-btn:hover {
+      background: rgba(255,255,255,0.12);
+      color: rgba(255,255,255,0.9);
+      border-color: rgba(255,255,255,0.1);
+      transform: translateX(2px);
+    }
+
+    .nav-btn .icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 7px;
+      background: rgba(255,255,255,0.1);
+      display: grid;
+      place-items: center;
+      font-size: 14px;
+      flex-shrink: 0;
+      transition: background 0.22s;
+    }
+
+    .nav-btn.active {
+      background: var(--brown-light);
+      color: #fff;
+      border-color: rgba(255,255,255,0.15);
+      box-shadow: 0 4px 14px rgba(0,0,0,0.25);
+    }
+
+    .nav-btn.active .icon {
+      background: rgba(255,255,255,0.22);
+    }
+
+    /* ── CONTENT AREA ── */
+    .content-area {
+      padding: 36px 40px;
+      display: flex;
+      flex-direction: column;
+      background: var(--white);
+    }
+
+    .content-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--title-color);
+      background: var(--title-bg);
+      padding: 12px 22px;
+      border-radius: 8px;
+      text-align: center;
+      margin-bottom: 28px;
+      letter-spacing: 0.01em;
+      border: 1px solid rgba(138,90,45,0.18);
+    }
+
+    .content-lines {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .content-line {
+      font-size: 14.5px;
+      line-height: 1.65;
+      color: var(--text-mid);
+      padding: 13px 18px;
+      background: var(--cream);
+      border-radius: 8px;
+      border-left: 3px solid var(--brown-muted);
+      opacity: 0;
+      transform: translateY(10px);
+      animation: fadeUp 0.35s ease forwards;
+    }
+
+    .content-line:nth-child(1)  { animation-delay: 0.05s; }
+    .content-line:nth-child(2)  { animation-delay: 0.12s; }
+    .content-line:nth-child(3)  { animation-delay: 0.19s; }
+    .content-line:nth-child(4)  { animation-delay: 0.26s; }
+    .content-line:nth-child(5)  { animation-delay: 0.33s; }
+
+    .content-line.empty {
+      background: transparent;
+      border-left-color: transparent;
+      padding: 4px 0;
+    }
+
+    .placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      flex: 1;
+      color: var(--sand);
+      gap: 12px;
+      margin-top: 40px;
+    }
+
+    .placeholder .big-icon { font-size: 48px; opacity: 0.4; }
+    .placeholder p { font-size: 13px; opacity: 0.6; }
+
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── FOOTER STRIP ── */
+    .footer-strip {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 28px;
+      background: var(--cream-dark);
+      border-top: 1px solid rgba(160,82,45,0.12);
+      font-size: 11.5px;
+      color: var(--brown-muted);
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .footer-strip .badge {
+      background: var(--brown-light);
+      color: #fff;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 10.5px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+    }
+
+    /* ── GMAIL PANEL ── */
+    .gmail-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      width: 100%;
+    }
+
+    .gmail-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 20px;
+      background: linear-gradient(135deg, #EA4335 0%, #c0392b 100%);
+      border-radius: 10px;
+      color: #fff;
+    }
+
+    .gmail-header .gmail-logo {
+      font-size: 22px;
+      background: rgba(255,255,255,0.2);
+      width: 40px; height: 40px;
+      border-radius: 8px;
+      display: grid; place-items: center;
+    }
+
+    .gmail-header h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .gmail-header p {
+      font-size: 11px;
+      opacity: 0.8;
+      margin-top: 1px;
+    }
+
+    /* Client list */
+    .client-list {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      max-height: 200px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
+    .client-list::-webkit-scrollbar { width: 4px; }
+    .client-list::-webkit-scrollbar-track { background: var(--cream); border-radius: 2px; }
+    .client-list::-webkit-scrollbar-thumb { background: var(--sand); border-radius: 2px; }
+
+    .client-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      background: var(--cream);
+      border-radius: 8px;
+      border: 1.5px solid transparent;
+      cursor: pointer;
+      transition: all 0.18s;
+      font-size: 13px;
+    }
+
+    .client-row:hover { border-color: var(--brown-muted); background: #F0E4D5; }
+    .client-row.selected { border-color: #EA4335; background: #FFF0EE; }
+
+    .client-row input[type=checkbox] { accent-color: #EA4335; width: 15px; height: 15px; flex-shrink: 0; }
+
+    .client-row .client-info { flex: 1; }
+    .client-row .client-name { font-weight: 600; color: var(--text-dark); }
+    .client-row .client-meta { font-size: 11px; color: var(--brown-muted); margin-top: 1px; }
+
+    .client-row .diff-badge {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 12px;
+      background: #FDE9E7;
+      color: #EA4335;
+      border: 1px solid #f5c6c2;
+    }
+
+    .client-row .diff-badge.ok { background: #E8F5E9; color: #2E7D32; border-color: #c8e6c9; }
+    .client-row .diff-badge.warn { background: #FFF8E1; color: #F57F17; border-color: #ffe082; }
+
+    /* Compose area */
+    .compose-area {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .compose-area label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--brown-muted);
+    }
+
+    .compose-area input,
+    .compose-area textarea {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1.5px solid var(--sand);
+      border-radius: 8px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      color: var(--text-dark);
+      background: var(--cream);
+      outline: none;
+      resize: vertical;
+      transition: border-color 0.18s;
+    }
+
+    .compose-area input:focus,
+    .compose-area textarea:focus {
+      border-color: #EA4335;
+      background: #fff;
+    }
+
+    .gmail-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-send {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #EA4335;
+      color: #fff;
+      border: none;
+      padding: 11px 22px;
+      border-radius: 8px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13.5px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-send:hover { background: #c0392b; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(234,67,53,0.35); }
+    .btn-send:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+    .btn-select-all {
+      background: transparent;
+      border: 1.5px solid var(--sand);
+      color: var(--text-mid);
+      padding: 9px 16px;
+      border-radius: 8px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.18s;
+    }
+    .btn-select-all:hover { border-color: var(--brown-muted); background: var(--cream); }
+
+    .send-status {
+      margin-top: 4px;
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      display: none;
+    }
+
+    .send-status.loading { background: #FFF8E1; color: #7B5800; border: 1px solid #FFE082; display: block; }
+    .send-status.success { background: #E8F5E9; color: #1B5E20; border: 1px solid #A5D6A7; display: block; }
+    .send-status.error   { background: #FFEBEE; color: #B71C1C; border: 1px solid #EF9A9A; display: block; }
+
+    .section-label {
+      font-size: 10.5px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--brown-muted);
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 620px) {
+      .layout { grid-template-columns: 1fr; }
+      .sidebar { flex-direction: row; flex-wrap: wrap; padding: 16px 12px; gap: 6px; border-right: none; border-bottom: 1px solid rgba(255,255,255,0.08); }
+      .sidebar-title { display: none; }
+      .nav-btn { font-size: 12px; padding: 8px 11px; }
+      .content-area { padding: 24px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="label">TCC — Técnico em Administração</div>
+    <h1>Centro de <span>Navegação</span> e Ajuda</h1>
+  </header>
+
+  <div class="panel">
+    <div class="layout">
+
+      <!-- Sidebar Navigation -->
+      <nav class="sidebar">
+        <div class="sidebar-title">Menu</div>
+
+        <button class="nav-btn" onclick="showContent('instrucoes', this)">
+          <span class="icon">📋</span> Instruções
+        </button>
+        <button class="nav-btn" onclick="showContent('sobre', this)">
+          <span class="icon">ℹ️</span> Sobre
+        </button>
+        <button class="nav-btn" onclick="showContent('criado', this)">
+          <span class="icon">👤</span> Criado Por
+        </button>
+        <button class="nav-btn" onclick="showContent('navegacao', this)">
+          <span class="icon">🧭</span> Navegação
+        </button>
+        <button class="nav-btn" onclick="showContent('avisos', this)">
+          <span class="icon">📢</span> Avisos
+        </button>
+        <button class="nav-btn" onclick="showContent('importantes', this)">
+          <span class="icon">⚠️</span> Avisos Importantes
+        </button>
+
+        <div style="margin-top:auto;padding-top:16px;border-top:1px solid rgba(255,255,255,0.1);">
+          <button class="nav-btn" onclick="showGmail(this)" style="background:rgba(234,67,53,0.18);border-color:rgba(234,67,53,0.3);">
+            <span class="icon" style="background:rgba(234,67,53,0.3);">✉️</span> Gmail
+          </button>
+        </div>
+      </nav>
+
+      <!-- Content Area -->
+      <section class="content-area" id="contentArea">
+        <div class="placeholder">
+          <div class="big-icon">🗂️</div>
+          <p>Selecione um item no menu para visualizar o conteúdo.</p>
+        </div>
+      </section>
+
+    </div>
+
+    <div class="footer-strip">
+      <span>Google Sheets + Google Apps Script</span>
+      <span class="badge">Curso Técnico em Administração</span>
+    </div>
+  </div>
+
+  <script>
+    // ── Dados da planilha (mesma estrutura do Apps Script: [id, data, hora, cliente, email]) ──
+    const hoje = new Date();
+    hoje.setHours(0,0,0,0);
+
+    function calcDiff(dataStr) {
+      const d = new Date(dataStr);
+      d.setHours(0,0,0,0);
+      return Math.floor((d - hoje) / (1000*60*60*24));
+    }
+
+    const dadosPlanilha = [
+      { id: "C001", data: "2026-03-15", hora: "09:00", cliente: "Ana Lima",       email: "ana.lima@email.com" },
+      { id: "C002", data: "2026-03-13", hora: "14:30", cliente: "Bruno Souza",    email: "bhas795001@email.com" },
+      { id: "C003", data: "2026-03-20", hora: "10:00", cliente: "Carla Mendes",   email: "carla.m@email.com" },
+      { id: "C004", data: "2026-03-12", hora: "16:00", cliente: "Diego Ferreira", email: "diego.f@email.com" },
+      { id: "C005", data: "2026-03-25", hora: "11:30", cliente: "Eduarda Costa",  email: "edu.costa@email.com" },
+      { id: "C006", data: "2026-04-01", hora: "08:00", cliente: "Felipe Rocha",   email: "fe.rocha@email.com" },
+    ].map(r => ({ ...r, diff: calcDiff(r.data) }));
+
+    // ── Gmail via Claude API + MCP ──
+    async function enviarEmailViaAPI(destinatario, assunto, corpo) {
+      // Chama /api/send-email (serverless function - sem CORS)
+      const resp = await fetch("/api/send-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ destinatario, assunto, corpo })
+      });
+
+      if (!resp.ok) {
+        const err = await resp.json().catch(() => ({}));
+        throw new Error(err.error || `HTTP ${resp.status}`);
+      }
+
+      const data = await resp.json();
+      return { ok: data.ok, msg: data.msg || "E-mail enviado com sucesso." };
+    }
+
+    function showGmail(btn) {
+      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const area = document.getElementById('contentArea');
+
+      const clientRows = dadosPlanilha.map((c, i) => {
+        const diffLabel = c.diff < 0 ? `${Math.abs(c.diff)}d atrás` : c.diff === 0 ? "Hoje" : `em ${c.diff}d`;
+        const badgeClass = c.diff < 0 ? "" : c.diff <= 2 ? "warn" : "ok";
+        return `
+          <div class="client-row" id="row_${i}" onclick="toggleClient(${i})">
+            <input type="checkbox" id="chk_${i}" onclick="event.stopPropagation(); toggleClient(${i})">
+            <div class="client-info">
+              <div class="client-name">${c.cliente}</div>
+              <div class="client-meta">${c.id} · ${c.data} às ${c.hora} · ${c.email}</div>
+            </div>
+            <span class="diff-badge ${badgeClass}">${diffLabel}</span>
+          </div>`;
+      }).join('');
+
+      area.innerHTML = `
+        <div class="gmail-panel">
+          <div class="gmail-header">
+            <div class="gmail-logo">✉️</div>
+            <div>
+              <h3>Envio de E-mails via Gmail</h3>
+              <p>Selecione clientes da planilha e envie notificações reais</p>
+            </div>
+          </div>
+
+          <div>
+            <div class="section-label">Clientes da planilha</div>
+            <div class="client-list" id="clientList">${clientRows}</div>
+          </div>
+
+          <div class="compose-area">
+            <label>Assunto do e-mail</label>
+            <input type="text" id="emailAssunto" value="Lembrete de Agendamento — TCC Administração" />
+            <label style="margin-top:6px">Corpo da mensagem</label>
+            <textarea id="emailCorpo" rows="4">Olá {CLIENTE}, tudo bem?
+
+Passando para lembrar que você tem um agendamento marcado para {DATA} às {HORA}.
+
+Atenciosamente,
+Equipe TCC — Administração</textarea>
+          </div>
+
+          <div class="gmail-actions">
+            <button class="btn-send" id="btnEnviar" onclick="enviarParaSelecionados()">
+              ✉️ Enviar para selecionados
+            </button>
+            <button class="btn-select-all" onclick="selecionarTodos()">Selecionar todos</button>
+          </div>
+
+          <div class="send-status" id="sendStatus"></div>
+        </div>
+      `;
+    }
+
+    function toggleClient(i) {
+      const chk = document.getElementById(`chk_${i}`);
+      const row = document.getElementById(`row_${i}`);
+      chk.checked = !chk.checked;
+      row.classList.toggle('selected', chk.checked);
+    }
+
+    function selecionarTodos() {
+      dadosPlanilha.forEach((_, i) => {
+        const chk = document.getElementById(`chk_${i}`);
+        const row = document.getElementById(`row_${i}`);
+        if (chk) { chk.checked = true; row.classList.add('selected'); }
+      });
+    }
+
+    async function enviarParaSelecionados() {
+      const selecionados = dadosPlanilha.filter((_, i) => {
+        const chk = document.getElementById(`chk_${i}`);
+        return chk && chk.checked;
+      });
+
+      if (selecionados.length === 0) {
+        setStatus('error', '⚠️ Selecione pelo menos um cliente antes de enviar.');
+        return;
+      }
+
+      const assunto = document.getElementById('emailAssunto').value.trim();
+      const corpoBase = document.getElementById('emailCorpo').value.trim();
+      const btn = document.getElementById('btnEnviar');
+
+      btn.disabled = true;
+      setStatus('loading', `⏳ Enviando ${selecionados.length} e-mail(s) via Gmail...`);
+
+      let enviados = 0, erros = 0;
+
+      for (const c of selecionados) {
+        const corpo = corpoBase
+          .replace(/{CLIENTE}/g, c.cliente)
+          .replace(/{DATA}/g, c.data)
+          .replace(/{HORA}/g, c.hora)
+          .replace(/{ID}/g, c.id);
+        try {
+          const result = await enviarEmailViaAPI(c.email, assunto, corpo);
+          if (result.ok) enviados++;
+          else erros++;
+        } catch (e) {
+          erros++;
+          console.error(e);
+        }
+      }
+
+      btn.disabled = false;
+
+      if (erros === 0) {
+        setStatus('success', `✅ ${enviados} e-mail(s) enviado(s) com sucesso via Gmail!`);
+      } else {
+        setStatus('error', `⚠️ ${enviados} enviado(s), ${erros} erro(s). Verifique a conexão Gmail.`);
+      }
+    }
+
+    function setStatus(type, msg) {
+      const el = document.getElementById('sendStatus');
+      if (!el) return;
+      el.className = `send-status ${type}`;
+      el.textContent = msg;
+    }
+
+    // ── Conteúdo estático dos outros botões ──
+    const contents = {
+      instrucoes: {
+        title: "Instruções de Uso",
+        lines: [
+          "Esse painel funciona como centro de navegação do TCC.",
+          "Clique em cada botão para carregar o conteúdo à direita.",
+          "O botão ativo ficará marrom escuro, os demais continuaram marrons claros."
+        ]
+      },
+      sobre: {
+        title: "Sobre o Sistema",
+        lines: [
+          "Esse sistema foi desenvolvido para o TCC em Administração:",
+          "",
+          "Ele centraliza cadastro, histórico, relatórios, possui sistemas de ID automático, avaliação e entre outras mais funções.",
+          "",
+          "O objetivo da planilha é facilitar a análise administrativa rotineiras, ter uma análise mais aprofundada sobre cada cliente, suas avaliações e seus pontos de melhorias.",
+          "",
+          "Desenvolvido com Google Sheets + Google Apps Script."
+        ]
+      },
+      criado: {
+        title: "Criado Por:",
+        lines: [
+          "Equipe: ...",
+          "Curso: Técnico em Administração",
+          "Turma / Semestre: ..."
+        ]
+      },
+      navegacao: {
+        title: "Navegação",
+        lines: [
+          "Botões: Cada um carrega um módulo de ajuda no sistema.",
+          "",
+          "Título e conteúdo serão atualizados automaticamente nessa aba pelo script.",
+          "",
+          "Exemplo: Ao selecionar o botão 'Avisos Importantes', irá aparecer informações importantes."
+        ]
+      },
+      avisos: {
+        title: "Avisos",
+        lines: [
+          "As colunas B, C, D, E, J e K da aba (TCC) não estão automatizada, então, terá que ser preenchidos manualmente.",
+          "",
+          "As colunas A e B da aba (Históricos de Pedidos) não estão automatizadas, então, terá que ser preenchidos manualmente."
+        ]
+      },
+      importantes: {
+        title: "Avisos Importantes",
+        lines: [
+          "Não altere de hipótese alguma nenhuma fórmula que tem nas células.",
+          "",
+          "Quando estiver acabado as linhas, apenas preencha automaticamente, a planilha irá continuar automaticamente as fórmulas sem quebrar.",
+          "",
+          "Na aba (TCC) não coloque ou expanda na coluna F (N. Máxima), pois na coluna I (Categoria) iria automaticamente ser marcado como (Muitos Rejeitam), sem qualquer tipo de avaliação."
+        ]
+      }
+    };
+
+    function showContent(key, btn) {
+      // Update active button
+      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const data = contents[key];
+      const area = document.getElementById('contentArea');
+
+      const linesHTML = data.lines.map(line =>
+        line === ""
+          ? `<div class="content-line empty"></div>`
+          : `<div class="content-line">${line}</div>`
+      ).join('');
+
+      area.innerHTML = `
+        <div class="content-title">${data.title}</div>
+        <div class="content-lines">${linesHTML}</div>
+      `;
+    }
+  </script>
+</body>
+</html>
